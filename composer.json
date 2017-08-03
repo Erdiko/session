@@ -1,0 +1,25 @@
+{
+	"name":"erdiko/session",
+    "description": "Session Handler",
+    "keywords": ["session", "erdiko"],
+    "homepage": "http://erdiko.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Arroyo Labs",
+            "email": "info@arroyolabs.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+        "pimple/pimple": "^3.0"
+    },
+    "config": {
+        "minimum-stability": "dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "erdiko\\session\\": "src/"
+        }
+    }
+}

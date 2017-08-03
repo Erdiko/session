@@ -1,0 +1,7 @@
+{
+  "default": "session",
+  "config": {
+    "path": "/tmp",
+    "lifetime": 60000
+  }
+}
