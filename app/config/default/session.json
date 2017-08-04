@@ -1,0 +1,7 @@
+{
+  "default": {
+    "driver": "file",
+    "path": "/tmp",
+    "lifetime": 60000
+  }
+}
