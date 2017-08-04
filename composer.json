@@ -1,8 +1,8 @@
 {
-	"name":"erdiko/session",
+	"name":"mpineda/session",
     "description": "Session Handler",
     "keywords": ["session", "erdiko"],
-    "homepage": "http://erdiko.org",
+    "homepage": "http://mpineda.org",
     "license": "MIT",
     "authors": [
         {
