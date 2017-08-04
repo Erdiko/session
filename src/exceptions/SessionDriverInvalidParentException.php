@@ -5,11 +5,11 @@ namespace erdiko\session;
 use Exception;
 
 /**
- * Class SessionDriverNotExistsException
+ * Class SessionDriverInvalidParentException
  *
  * @package erdiko\session
  */
-class SessionDriverNotExistsException extends Exception
+class SessionDriverInvalidParentException extends Exception
 {
     public function __construct($message = "", $code = 0, Exception $previous = null)
     {
