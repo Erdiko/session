@@ -1,6 +1,6 @@
 <?php
 
-namespace \erdiko\session\helpers;
+namespace erdiko\session\helpers;
 
 use erdiko\core\Helper;
 

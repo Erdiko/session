@@ -1,6 +1,6 @@
 <?php
 
-namespace \erdiko\session\abstracts;
+namespace erdiko\session\abstracts;
 
 use erdiko\session\helpers\Config;
 use erdiko\session\interfaces\Session_Driver_Interface;
@@ -56,7 +56,6 @@ abstract class Session_Driver_Abstract implements Session_Driver_Interface
 
     protected function loadConfig()
     {
-        Config::getConfig();
     }
 
 }

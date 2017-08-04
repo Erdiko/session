@@ -2,10 +2,14 @@
 
 namespace erdiko\session;
 
+use erdiko\session\abstracts\Session_Driver_Abstract;
 use Pimple\Container;
+use erdiko\session\helpers\Config;
 
 final class Session
 {
+    const DRIVER_PREFIX_CLASS = 'Session_Driver_';
+
     /**
      * @var $instance Session
      */
@@ -17,17 +21,9 @@ final class Session
     protected $container;
 
     /**
-     * Session constructor.
-     *
-     * @name __construct
-     * @access protected
+     * @var $config array
      */
-    protected function __construct()
-    {
-        if (!$this->container) {
-            $this->initDefaultDriver();
-        }
-    }
+    protected $config;
 
     /**
      * @name getInstance
@@ -42,6 +38,19 @@ final class Session
     }
 
     /**
+     * Session constructor.
+     *
+     * @name __construct
+     * @access protected
+     */
+    protected function __construct()
+    {
+        if (!$this->container) {
+            $this->initDriver();
+        }
+    }
+
+    /**
      * @param $name
      * @param $arguments
      * @return mixed
@@ -52,6 +61,7 @@ final class Session
     }
 
     /**
+     * @name getDriver
      * @param string $driver
      * @return mixed
      */
@@ -60,17 +70,43 @@ final class Session
         return static::getInstance()->container[$driver];
     }
 
-    private function initDefaultDriver()
+    /**
+     *
+     */
+    private function initDriver()
     {
-        $this->loadConfigDriver();
-        $this->instanceDriver();
+        $this->loadConfig();
+        $this->instanceDriver($this->getDriverClassName('default'));
     }
 
-    private function loadConfigDriver()
+    private function loadConfig()
     {
+        $this->config = Config::get();
     }
 
-    private function instanceDriver()
+    private function getDriverClassName($driver)
+    {
+        $driverName = ucfirst(strtolower($this->config[$driver]));
+        $driverClassName = self::DRIVER_PREFIX_CLASS.$driverName;
+
+        if (!class_exists($driverClassName)) {
+            throw new SessionDriverNotExistsException("Driver $driverClassName class does not exists.");
+        }
+
+        $parents = class_parents($driverClassName);
+        if (!$parents || !in_array('Session_Driver_Abstract', $parents)) {
+            throw new SessionDriverInvalidParentException("Driver $driverClassName must implements Session_Driver_Interface");
+        }
+
+        $interfaces = class_implements($driverClassName);
+        if (!$interfaces || !in_array('Session_Driver_Interface', $interfaces)) {
+            throw new SessionDriverInvalidInterfaceException("Driver $driverClassName must implements Session_Driver_Interface");
+        }
+
+        return $driverClassName;
+    }
+
+    private function instanceDriver($driverClassName)
     {
         $this->container = new Container();
         $container['session'] = function ($c) {
