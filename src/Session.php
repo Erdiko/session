@@ -2,9 +2,22 @@
 
 namespace erdiko\session;
 
+use erdiko\session\exceptions\SessionDriverInvalidInterfaceException;
+use erdiko\session\exceptions\SessionDriverInvalidParentException;
+use erdiko\session\exceptions\SessionDriverNotExistsException;
 use Pimple\Container;
 use erdiko\session\helpers\Config;
+use erdiko\session\exceptions\SessionDriverInvalidException;
 
+/**
+ * Erdiko\Session
+ *
+ * @method static mixed get($index)
+ * @method static mixed set($index)
+ * @method static mixed has($index)
+ *
+ * @package erdiko\session
+ */
 final class Session
 {
     const DRIVER_NAME_DEFAULT = 'default';
@@ -22,38 +35,21 @@ final class Session
      *
      * @var $container Container
      */
-    protected $container;
+    protected static $container;
 
     /**
      * Config Array
      *
      * @var $config array
      */
-    protected $config;
+    protected static $config;
 
     /**
      * Current Driver
      *
      * @var $driverName string
      */
-    protected $driverName;
-
-    /**
-     * @name getInstance
-     * @return mixed
-     */
-    protected static function getInstance()
-    {
-        if (is_null(static::$instance)) {
-            static::$instance = new self();
-        }
-        return static::$instance;
-    }
-
-    protected function __construct()
-    {
-        $this->loadConfig();
-    }
+    protected static $driverName;
 
     /**
      * Session::getDatabase()
@@ -65,10 +61,12 @@ final class Session
      */
     public static function __callStatic($name, $arguments)
     {
-        if (!$driverName = static::getDriverName($name)) {
-            $driverName = static::DRIVER_PREFIX_CLASS;
+        static::getContainer();
+
+        if (static::isDriverSource($name)) {
+            return static::getDriver($name);
         }
-        return static::getDriver($driverName)->$name($arguments);
+        return static::getDriver(static::DRIVER_NAME_DEFAULT)->$name($arguments);
     }
 
     private static function getDriverName($name)
@@ -76,6 +74,21 @@ final class Session
         if (!static::isDriver($name)) {
             throw new SessionDriverInvalidException("Session: $name is an invalid driver name.");
         }
+        return static::getDriverClassName();
+    }
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    private static function isDriverSource($name)
+    {
+        if (strpos($name, 'getDriver')!==false) {
+            $name = strtolower(str_replace('getDriver', '', $name));
+        }
+        static::$driverName = $name;
+
+        return isset(static::$config[$name]);
     }
 
     /**
@@ -85,18 +98,7 @@ final class Session
      */
     public static function getDriver($driver='default')
     {
-        return static::getInstance()->container[$driver];
-    }
-
-    /**
-     * @name initDriver
-     * @access private
-     * @return void
-     */
-    private function initDriver()
-    {
-        $this->loadConfig();
-        $this->instanceDriver($this->getDriverClassName());
+        return static::instanceDriver($driver);
     }
 
     /**
@@ -104,9 +106,9 @@ final class Session
      * @access private
      * @return void
      */
-    private function loadConfig()
+    private static function loadConfig()
     {
-        $this->config = Config::get();
+        static::$config = Config::get();
     }
 
     /**
@@ -119,7 +121,7 @@ final class Session
      */
     private function getDriverClassName()
     {
-        $driverName = ucfirst(strtolower($this->config[$this->driver]));
+        $driverName = ucfirst(strtolower(static::$driverName));
         $driverClassName = self::DRIVER_PREFIX_CLASS.$driverName;
 
         if (!class_exists($driverClassName)) {
@@ -144,22 +146,17 @@ final class Session
      * @access private
      * @param $driverClassName
      */
-    private function instanceDriver($driverClassName)
+    private static function instanceDriver($driverClassName)
     {
-        $this->container = new Container();
+        static::$container = new Container();
         $container['session'] = function () use ($driverClassName) {
             return new $driverClassName;
         };
     }
 
-    private static function isDriver($name)
+    private static function getContainer()
     {
-        if (strpos($name, 'getDriver')!==false) {
-            return strtolower(str_replace('getDriver', '', $name));
-        }
-        if (isset($this->config[$name])) {
-
-        }
+        static::$container = new Container();
     }
 
 }

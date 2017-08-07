@@ -1,6 +1,6 @@
 <?php
 
-namespace erdiko\session;
+namespace erdiko\session\exceptions;
 
 use Exception;
 

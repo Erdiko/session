@@ -1,6 +1,6 @@
 {
-  "default": {
-    "driver": "file",
+  "default": { // Driver
+    "driver": "file",  // Driver Type
     "path": "/tmp",
     "lifetime": 60000
   }
