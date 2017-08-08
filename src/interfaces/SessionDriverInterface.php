@@ -3,18 +3,15 @@
 namespace erdiko\session\interfaces;
 
 /**
- * Interface Session_Driver_Interface
+ * Interface SessionDriverInterface
  *
  * @package erdiko\session\interfaces
  */
-interface Session_Driver_Interface
+interface SessionDriverInterface
 {
-    /**
-     * @return mixed
-     */
-    public function start();
 
     /**
+     * @name get
      * @param $name
      * @return mixed
      */
@@ -33,17 +30,18 @@ interface Session_Driver_Interface
      */
     public function has($name);
 
-//    public function forget($name);
-//
-//    public function exists($name);
-//
-//    public function extend($name, $time);
-//
-//    public function reduce($name, $time);
-//
-//    public function flush();
-//
-//
-//    public function destroy();
+    public function forget($name);
+
+    public function exists($name);
+
+    public function extend($name, $time);
+
+    public function reduce($name, $time);
+
+    public function expiresIn($name);
+
+    public function expired($name);
+
+    public function flush();
 
 }

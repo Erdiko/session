@@ -3,9 +3,9 @@
 namespace erdiko\session\abstracts;
 
 use erdiko\session\helpers\Config;
-use erdiko\session\interfaces\Session_Driver_Interface;
+use erdiko\session\interfaces\SessionDriverInterface;
 
-abstract class Session_Driver_Abstract implements Session_Driver_Interface
+abstract class SessionDriverAbstract implements SessionDriverInterface
 {
     /**
      * @var $name string
@@ -19,10 +19,12 @@ abstract class Session_Driver_Abstract implements Session_Driver_Interface
 
     /**
      * Session_Driver_Abstract constructor.
+     *
+     * @param $config array
      */
-    final public function __construct()
+    final public function __construct($config)
     {
-        $this->init();
+        $this->config = $config;
         $this->_construct();
     }
 
@@ -33,7 +35,7 @@ abstract class Session_Driver_Abstract implements Session_Driver_Interface
      */
     protected function _construct()
     {
-        // Add your own logic to change the initialization
+        // Add your own logic to customize the initialization of the driver
     }
 
     /**
@@ -54,8 +56,9 @@ abstract class Session_Driver_Abstract implements Session_Driver_Interface
         return $this->config;
     }
 
-    protected function loadConfig()
+    public function __destruct()
     {
+        // Add your own logic to customize the destruct of the driver
     }
 
 }
