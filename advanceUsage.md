@@ -5,7 +5,7 @@
 Here you will find how to use on details the Erdiko Session Package
 
 ### How it works
-If you need more details regarding how Erdiko Session Package works please visit our [official documentation page]((http://erdiko.org/session/)).
+If you need more details regarding how Erdiko Session Package works please visit our [official documentation page](http://erdiko.org/session/).
  
 ### Methods
 
