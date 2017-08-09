@@ -11,9 +11,18 @@ use erdiko\session\helpers\Config;
 /**
  * Erdiko\Session
  *
- * @method static mixed get($index)
- * @method static mixed set($index)
+ * @method static mixed getName()
+ * @method static mixed getConfig()
+ * @method static mixed get($index, $expired)
+ * @method static mixed set($name, $value, $lock=false, $seconds=false)
  * @method static mixed has($index)
+ * @method static mixed forget($index, $force=false)
+ * @method static mixed exists($index)
+ * @method static mixed extend($index, $seconds)
+ * @method static mixed reduce($index, $seconds)
+ * @method static mixed expiresIn($index)
+ * @method static mixed expired($index)
+ * @method static mixed flush()
  *
  * @usage
  *
@@ -82,8 +91,8 @@ final class Session
      * Session constructor
      *
      * @name __construct
+     * @internal param $__construct
      * @access protected
-     * @return void
      */
     protected function __construct()
     {
@@ -94,6 +103,8 @@ final class Session
     /**
      * Magic method to retrieve a driver or dispatch a driver method
      *
+     * @name __callStatic
+     * @access public
      * @param $name
      * @param $args
      * @return mixed
@@ -123,6 +134,8 @@ final class Session
     /**
      * Check and retrieve the driver source name
      *
+     * @name getDriverSource
+     * @access private
      * @param $name
      * @return bool
      */
@@ -138,7 +151,8 @@ final class Session
      * Retrieve the instance of a given Driver
      *
      * @name getDriver
-     * @param string $driver
+     * @access private
+     * @param string $driverSource
      * @return mixed
      */
     private function getDriver($driverSource='default')
@@ -196,7 +210,7 @@ final class Session
      *
      * @name setInstanceDriver
      * @access private
-     * @param $driverClassName
+     * @internal param $driverClassName
      */
     private function setInstanceDriver()
     {

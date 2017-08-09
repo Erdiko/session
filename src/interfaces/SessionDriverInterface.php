@@ -11,18 +11,19 @@ interface SessionDriverInterface
 {
 
     /**
-     * @name get
      * @param $name
+     * @param bool $expired
      * @return mixed
+     * @internal param $get
      */
-    public function get($name);
+    public function get($name, $expired=false);
 
     /**
      * @param $name
      * @param $value
      * @return mixed
      */
-    public function set($name, $value);
+    public function set($name, $value, $lock=false, $seconds=false);
 
     /**
      * @param $name
@@ -30,18 +31,48 @@ interface SessionDriverInterface
      */
     public function has($name);
 
-    public function forget($name);
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function forget($name, $force=false);
 
+    /**
+     * @param $name
+     * @return mixed
+     */
     public function exists($name);
 
-    public function extend($name, $time);
+    /**
+     * @param $name
+     * @param $time
+     * @return mixed
+     */
+    public function extend($name, $seconds);
 
-    public function reduce($name, $time);
+    /**
+     * @param $name
+     * @param $time
+     * @return mixed
+     */
+    public function reduce($name, $seconds);
 
+    /**
+     * @param $name
+     * @return mixed
+     */
     public function expiresIn($name);
 
+    /**
+     * @param $name
+     * @return mixed
+     */
     public function expired($name);
 
-    public function flush();
+    /**
+     * @param $force
+     * @return mixed
+     */
+    public function flush($force);
 
 }
