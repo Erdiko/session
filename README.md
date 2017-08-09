@@ -16,7 +16,7 @@ Documentation for Erdiko Session Package can be found on the [Erdiko website](ht
 
 #### Installation
 
-We recommend installing Erdiko Session Package with [composer](here https://getcomposer.org/).  At the commandline simply run:
+We recommend installing Erdiko Session Package with [Composer](https://getcomposer.org/).  At the commandline simply run:
 ```
 $ composer require erdiko/session
 ```
@@ -64,27 +64,27 @@ You will find several methods that will satisfy your requirements for handling s
 #### Basic Usage
 For more details please see [*Advance Usage Detail*](/advanceUsage.md) Page.
 
+##### Set Method
+Set the value on session
+```
+Session::set('name', 'value');
+```
 ##### Get method
 Retrieves the value from the session
 ```
 Session::get('name');
-```
-##### Set a value
-Set the value on session
-```
-Session::set('name', 'value');
 ```
 ##### Has method
 Verifies if the given key exists and has a value on the session
 ```
 Session::get('name');
 ```
-##### Exists a value
+##### Exists method
 Verifies if the given key exists, without verify if has or not value
 ```
 Session::set('name', 'value');
 ```
-##### Forget a value
+##### Forget method
 Removes the given key from the session
 ```
 Session::set('name', 'value');
