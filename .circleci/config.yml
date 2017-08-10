@@ -1,0 +1,55 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: erdiko/docker-compose:1.11
+    working_directory: /code
+
+    environment:
+      TEST_RESULTS: /tmp/test-results
+
+    steps:
+      - checkout
+
+      - run: mkdir -p $TEST_RESULTS
+
+      - setup_remote_docker
+
+      - run:
+          name: Build container environment
+          command: |
+            set -x
+
+            chmod 770 scripts/*.sh
+            chmod 770 scripts/ci/*.sh
+            chmod 770 scripts/dev/*.sh
+            ./scripts/ci/install-repos.sh
+
+            pwd
+            ls -al
+
+            ./scripts/ci/build-ci.sh
+
+            docker exec -it erdiko_users_php /code/scripts/ci/curl-test.sh
+
+      - run:
+          name: Run PHPUnit tests
+          command: |
+            set -x
+
+            docker exec -it erdiko_users_php /code/scripts/ci/run-php-tests.sh
+
+      #- run:
+      #    name: Run e2e tests
+      #    command: |
+      #      set -x
+
+      #      docker exec -it erdiko_users_php /code/scripts/ci/run-e2e-tests.sh
+
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: raw-test-output
+
+      - store_test_results:
+          path: /tmp/test-results
