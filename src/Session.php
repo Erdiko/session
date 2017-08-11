@@ -11,6 +11,8 @@ use erdiko\session\helpers\Config;
 /**
  * Erdiko\Session
  *
+ *
+ *
  * @method static mixed getName()
  * @method static mixed getConfig()
  * @method static mixed get($index, $expired)
