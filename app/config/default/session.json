@@ -1,7 +1,9 @@
 {
   "default": { // Driver
     "driver": "file",  // Driver Type
-    "path": "/tmp",
-    "lifetime": 60000
+    "session_config": {
+      "save_path": "/tmp",
+      "lifetime": 60000
+    }
   }
 }

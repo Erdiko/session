@@ -39,13 +39,17 @@ class SessionDriverFile extends SessionDriverAbstract
     }
 
     /**
-     * @name initConfig
-     * @access protected
      * @return void
+     * @throws SessionDriverConfigException
+     * @internal param $initConfig
+     * @access protected
      */
     protected function initConfig()
     {
-        //@TODO improve config adding more values to customize
+        if (!isset($this->config['session_config'])) {
+            throw new SessionDriverConfigException('Session Config Section is not set.');
+        }
+        $this->sessionConfig = $this->config['session_config'];
         $this->initSavePath();
     }
 
@@ -54,22 +58,30 @@ class SessionDriverFile extends SessionDriverAbstract
      *
      * @name initSession
      * @access private
+     * @return bool
      */
     private function initSession()
     {
+        if (php_sapi_name() == 'cli') {
+            return false;
+        }
         if (!session_id()) {
             session_start($this->sessionConfig);
         }
     }
 
     /**
+     * Initialize session path
+     *
+     * @name initSavePath
+     * @access private
      * @throws SessionDriverConfigException
      */
     private function initSavePath()
     {
         $savePath = self::DEFAULT_SAVE_PATH;
-        if (!$this->config['path'] || !isset($this->config['path'])) {
-            $savePath = $this->config['path'];
+        if (!$this->sessionConfig['save_path'] || !isset($this->sessionConfig['save_path'])) {
+            $savePath = $this->sessionConfig['save_path'];
         }
         $realSavePath = realpath($savePath);
         if(!$realSavePath) {
