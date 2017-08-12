@@ -1,27 +1,43 @@
 <?php
 
-namespace \erdiko\session\helpers;
+namespace erdiko\session\helpers;
 
 use erdiko\core\Helper;
+use erdiko\session\exceptions\SessionDriverConfigException;
 
 class Config
 {
     const CONFIG_NAME = 'session';
 
+    /**
+     * @var $config
+     * @static
+     * @access protected
+     */
     protected static $config;
 
     /**
-     * @name getConfig
+     * @return mixed
+     * @throws SessionDriverConfigException
+     * @internal param $getConfig
      * @access private
      * @static
-     * @return mixed
      */
     private static function getConfig()
     {
-        if (!static::$config) {
-            static::$config = Helper::getConfig(static::CONFIG_NAME);
+        try {
+            if (!static::$config) {
+                static::$config = Helper::getConfig(static::CONFIG_NAME);
+            }
+            return static::$config;
+        } catch (\Exception $e) {
+            if (strpos($e->getMessage(), 'file not found')!==false) {
+                throw new SessionDriverConfigException('Session config file '.static::CONFIG_NAME.'.json not found.');
+            }
+            if (strpos($e->getMessage(), 'parse error')!==false) {
+                throw new SessionDriverConfigException('Session config '.static::CONFIG_NAME.'.json has invalid json data.');
+            }
         }
-        return static::$config;
     }
 
     /**
@@ -50,16 +66,12 @@ class Config
     {
         $config = static::getConfig();
         $indexes = explode('.', $path);
-//        $latestIndex = end($index);
         $current = $config;
 
         foreach ($indexes as $index) {
             if (!isset($current[$index])) {
                 return false;
             }
-//            if ($index == $latestIndex) {
-//                return $current[$index];
-//            }
             $current = $current[$index];
         }
         return $current;
