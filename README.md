@@ -1,44 +1,45 @@
 # Erdiko Session Package
 
-[![Package version](https://img.shields.io/packagist/v/erdiko/erdiko.svg?style=flat-square)](https://packagist.org/packages/erdiko/erdiko)
-[![CircleCI](https://circleci.com/gh/Erdiko/erdiko.svg?style=svg)](https://circleci.com/gh/Erdiko/erdiko)
-[![License](https://poser.pugx.org/erdiko/erdiko/license)](https://packagist.org/packages/erdiko/erdiko)
+[![Package version](https://img.shields.io/packagist/v/erdiko/session.svg?style=flat-square)](https://packagist.org/packages/erdiko/session)
+[![CircleCI](https://circleci.com/gh/Erdiko/session.svg?style=svg)](https://circleci.com/gh/Erdiko/session)
+[![License](https://poser.pugx.org/erdiko/session/license)](https://packagist.org/packages/erdiko/session)
 
 ## Important: This package is currently on development, please don't use it until have a beta or stable version.
 
 ### Introduction
 
-Erdiko Session is a package to handle on a easy and elastic way your persistent data through the lifetime of your application.
+Erdiko Session is a package to handle in an easy and elastic way to persistent user data through the lifetime of your application.
 
-#### Official Documentation
+### Official Documentation
 
 Documentation for Erdiko Session Package can be found on the [Erdiko website](http://erdiko.org/session/).
 
-#### Installation
+### Installation
 
 We recommend installing Erdiko Session Package with [Composer](https://getcomposer.org/).  At the commandline simply run:
 ```
-$ composer require erdiko/session
+composer require erdiko/session
 ```
 
-#### Drivers
+### Drivers
 
 Current Drivers Available:
- - Session_Driver_File
+ - File: SessionDriverFile
 
 Coming Drivers in development:
- - Session_Driver_Database
- - Session_Driver_Cookie
+ - Redis: SessionDriverRedis
+ - Database: SessionDriverDatabase
+ - Cookie: SessionDriverCookie
 
-#### Dependencies
+### Dependencies
 
 This package depends of Erdiko\Core
 
-#### Configuration
+### Configuration
 
 File Path
 ```
-$ site_root/app/config/default/session.json
+[site_root]/app/config/default/session.json
 ```
 
 File format
@@ -51,7 +52,7 @@ File format
   }
 }
 ```
-#### Available Methods
+### Available Methods
 
 You will find several methods that will satisfy your requirements for handling session data.
 
@@ -61,45 +62,45 @@ You will find several methods that will satisfy your requirements for handling s
  - forget
  - exists
 
-#### Basic Usage
+### Basic Usage
 For more details please see [*Advance Usage Detail*](/advanceUsage.md) Page.
 
-##### Set Method
+#### Set Method
 Set the value on session
 ```
 Session::set('name', 'value');
 ```
-##### Get method
+#### Get method
 Retrieves the value from the session
 ```
 Session::get('name');
 ```
-##### Has method
+#### Has method
 Verifies if the given key exists and has a value on the session
 ```
 Session::get('name');
 ```
-##### Exists method
+#### Exists method
 Verifies if the given key exists, without verify if has or not value
 ```
 Session::set('name', 'value');
 ```
-##### Forget method
+#### Forget method
 Removes the given key from the session
 ```
 Session::set('name', 'value');
 ```
 
-#### Tests
+### Tests
 *On development*
 
 ### Credits
 
+* Mauricio Gastón
 * John Arroyo
-* Andy Armstrong
 * Leo Daidone
 
-[All Contributors](https://github.com/Erdiko/erdiko/graphs/contributors)
+[All Contributors](https://github.com/Erdiko/session/graphs/contributors)
 
 * If you want to help, please do, we'd love more brainpower!  Fork, commit your enhancements and do a pull request.  If you want to get to even more involved please contact us!
 
