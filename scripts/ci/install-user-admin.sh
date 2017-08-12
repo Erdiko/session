@@ -25,8 +25,8 @@ chmod 770 scripts/ci/*.sh
 
 # Swap in the recent ci build code
 cd ../
-rm -rf repos/authorize
-cp -R /code repos/authorize
+rm -rf repos/session
+cp -R /code repos/session
 mv /user-admin /code
 
 # Debug

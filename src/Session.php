@@ -24,7 +24,7 @@ use erdiko\session\helpers\Config;
  * @method static mixed expired($index)
  * @method static mixed flush()
  *
- * @usage
+ * @usage https://github.com/pinedamg/session/blob/master/advanceUsage.md
  *
  * Session::getDriverDatabase();
  * Session::database();

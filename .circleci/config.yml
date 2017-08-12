@@ -14,6 +14,17 @@ jobs:
 
       - run: mkdir -p $TEST_RESULTS
 
+      - run:
+          name: Prep environment (related repos)
+          command: |
+            set -x
+
+            chmod 770 scripts/ci/*.sh
+            ./scripts/ci/install-user-admin.sh
+
+            pwd
+            ls -al
+
       - setup_remote_docker
 
       - run:
@@ -21,31 +32,19 @@ jobs:
           command: |
             set -x
 
-            chmod 770 scripts/*.sh
-            chmod 770 scripts/ci/*.sh
-            chmod 770 scripts/dev/*.sh
-            ./scripts/ci/install-repos.sh
+            cd /code/user-admin
 
             pwd
             ls -al
 
             ./scripts/ci/build-ci.sh
 
-            docker exec -it erdiko_users_php /code/scripts/ci/curl-test.sh
-
       - run:
           name: Run PHPUnit tests
           command: |
             set -x
 
-            docker exec -it erdiko_users_php /code/scripts/ci/run-php-tests.sh
-
-      #- run:
-      #    name: Run e2e tests
-      #    command: |
-      #      set -x
-
-      #      docker exec -it erdiko_users_php /code/scripts/ci/run-e2e-tests.sh
+            docker exec -it erdiko_users_php /code/vendor/erdiko/session/scripts/ci-tests.sh
 
       - store_artifacts:
           path: /tmp/test-results
