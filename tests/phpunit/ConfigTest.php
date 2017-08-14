@@ -21,15 +21,6 @@ class ConfigTest extends ErdikoTestCase
         @session_start();
 	}
 
-	public function testValidFile()
-    {
-//        $config = Config::get();
-//
-//        $this->assertNotEmpty($config);
-//        $this->assertIsArray($config);
-//        $this->assertEquals($config[0], 'default');
-    }
-
     /**
      *
      * @expectedException \erdiko\session\exceptions\SessionDriverConfigException
@@ -38,7 +29,25 @@ class ConfigTest extends ErdikoTestCase
     {
         $this->moveFile();
         Config::get();
+    }
+
+	public function testValidConfig()
+    {
         $this->moveFile(true);
+        $config = Config::get();
+        $this->assertNotEmpty($config);
+        $this->assertTrue(is_array($config));
+        $this->assertArrayHasKey('default', $config);
+        $this->assertArrayHasKey('driver', $config['default']);
+        $this->assertArrayHasKey('save_path', $config['default']['session_config']);
+    }
+
+    public function testDotNotation()
+    {
+        $config = Config::getByPath('default.driver');
+        $this->assertNotEmpty($config);
+        $this->assertTrue(is_string($config));
+        $this->assertEquals($config, 'file');
     }
 
     /**
@@ -51,37 +60,6 @@ class ConfigTest extends ErdikoTestCase
         $path = realpath(self::CONFIG_PATH).'/';
 
         rename($path.$fromFilename, $path.$toFilename);
-    }
-
-	public function testValidConfig()
-    {
-        $this->moveFile(true);
-        $config = Config::get();
-        $this->assertNotEmpty($config);
-        $this->assertTrue(is_array($config));
-        $this->assertArrayHasKey('default', $config);
-        $this->assertArrayHasKey('driver', $config['default']);
-        $this->assertArrayHasKey('path', $config['default']);
-    }
-
-    public function testDotNotation()
-    {
-        $config = Config::getByPath('default.driver');
-        $this->assertNotEmpty($config);
-        $this->assertTrue(is_string($config));
-        $this->assertEquals($config, 'file');
-    }
-
-    private function _moveFile($rollback=false)
-    {
-        $path = realpath('/code/app/config/default');
-        $origFile = '/session.json';
-        $invalidFile = '/session_invalid.json';
-
-        $fromFile = $rollback ? $path.$invalidFile : $path.$origFile;
-        $toFile = $rollback ? $path.$origFile : $path.$invalidFile;
-
-        rename($fromFile, $toFile);
     }
 
 }

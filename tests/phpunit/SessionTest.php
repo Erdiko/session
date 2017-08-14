@@ -10,10 +10,6 @@ use tests\ErdikoTestCase;
 class SessionTest extends ErdikoTestCase
 {
 
-    public function setUp()
-    {
-    }
-
     public function testSet()
     {
         Session::set('index', 'value');
