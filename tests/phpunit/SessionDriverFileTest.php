@@ -6,7 +6,6 @@ require_once dirname(__DIR__) . '/ErdikoTestCase.php';
 
 use erdiko\session\drivers\SessionDriverFile;
 use erdiko\session\helpers\Config;
-use erdiko\session\Session;
 use tests\ErdikoTestCase;
 
 class SessionDriverFileTest extends ErdikoTestCase
@@ -15,7 +14,7 @@ class SessionDriverFileTest extends ErdikoTestCase
 
     public function setUp()
     {
-        $this->sessionDriverFile = new SessionDriverFile(Config::get('default'));
+        $this->sessionDriverFile = new SessionDriverFile(Config::get('file'));
     }
 
     public function testSet()
