@@ -2,7 +2,7 @@
 
 namespace erdiko\session\helpers;
 
-use erdiko\core\Helper;
+use erdiko\Helper;
 use erdiko\session\exceptions\SessionDriverConfigException;
 
 class Config
@@ -27,7 +27,9 @@ class Config
     {
         try {
             if (!static::$config) {
-                static::$config = Helper::getConfig(static::CONFIG_NAME);
+                // @todo this should be injected with pimple
+                // static::$config = Helper::getConfig(static::CONFIG_NAME);
+                static::$config = require getenv("ERDIKO_ROOT").'/config/session.php';
             }
             return static::$config;
         } catch (\Exception $e) {

@@ -139,6 +139,14 @@ abstract class SessionDriverAbstract implements SessionDriverInterface
     abstract protected function isEmpty($key);
 
     /**
+     *
+     */
+    public function start()
+    {
+
+    }
+
+    /**
      * Retrieve given value by index
      *
      * @name get
