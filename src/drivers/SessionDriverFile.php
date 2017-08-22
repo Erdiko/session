@@ -139,9 +139,12 @@ class SessionDriverFile extends SessionDriverAbstract
      * @param $key
      * @return mixed
      */
-    protected function getValue($key)
+    protected function &getValue($key)
     {
-        return !$this->keyExists($key) ? false : $_SESSION[$key];
+        if ($this->keyExists($key)) {
+            return $_SESSION[$key];
+        }
+        return null;
     }
 
     /**
