@@ -2,11 +2,12 @@
 
 namespace erdiko\session\abstracts;
 
+use ArrayAccess;
 use erdiko\session\exceptions\SessionDriverConfigException;
 use erdiko\session\exceptions\SessionDriverValueLocked;
 use erdiko\session\interfaces\SessionDriverInterface;
 
-abstract class SessionDriverAbstract implements SessionDriverInterface
+abstract class SessionDriverAbstract implements SessionDriverInterface, ArrayAccess
 {
     const SUFFIX_LOCKED = '_locked';
     const SUFFIX_EXPIRE = '_expires';
@@ -103,7 +104,7 @@ abstract class SessionDriverAbstract implements SessionDriverInterface
      * @param $key
      * @return mixed
      */
-    abstract protected function getValue($key);
+    abstract protected function &getValue($key);
 
     /**
      * Remove value by key
@@ -139,6 +140,14 @@ abstract class SessionDriverAbstract implements SessionDriverInterface
     abstract protected function isEmpty($key);
 
     /**
+     *
+     */
+    public function start()
+    {
+
+    }
+
+    /**
      * Retrieve given value by index
      *
      * @name get
@@ -146,7 +155,7 @@ abstract class SessionDriverAbstract implements SessionDriverInterface
      * @param $name
      * @return mixed
      */
-    public function get($name, $expired=false)
+    public function &get($name, $expired=false)
     {
         if (!$expired && $this->expired($name)) {
             return false;
@@ -382,6 +391,51 @@ abstract class SessionDriverAbstract implements SessionDriverInterface
     protected function getLockedKey($key)
     {
         return $key.self::SUFFIX_LOCKED;
+    }
+
+    /**
+     * @name offsetExists
+     * @access public
+     * @param mixed $offset
+     * @return bool
+     */
+    public function offsetExists($offset)
+    {
+        return $this->exists($offset);
+    }
+
+    /**
+     * @name offsetGet
+     * @access public
+     * @param mixed $offset
+     * @return bool
+     */
+    public function &offsetGet($offset)
+    {
+        return $this->get($offset);
+    }
+
+    /**
+     * @name offsetSet
+     * @param mixed $offset
+     * @param mixed $value
+     * @return bool
+     * @access public
+     */
+    public function offsetSet($offset, $value)
+    {
+        $this->set($offset, $value);
+    }
+
+    /**
+     * @name offsetUnset
+     * @access public
+     * @param mixed $offset
+     * @return bool
+     */
+    public function offsetUnset($offset)
+    {
+        $this->forget($offset);
     }
 
     /**
